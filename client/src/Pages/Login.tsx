@@ -1,8 +1,15 @@
-import { Formik } from "formik";
+import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../store/reducer";
+import { useState } from "react";
+
+// Define the types for form values
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
 
 // Schema and Initial Values
 const loginSchema = Yup.object().shape({
@@ -16,40 +23,52 @@ const loginSchema = Yup.object().shape({
   password: Yup.string().required("Password is required"),
 });
 
-const initialValuesLogin = {
+const initialValuesLogin: LoginFormValues = {
   email: "",
   password: "",
 };
-const Login = () => {
+
+const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
-  const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch(
-      "http://localhost:8080/api/v1/user/login",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(values),
+  // Login function
+  const login = async (
+    values: LoginFormValues,
+    onSubmitProps: FormikHelpers<LoginFormValues>
+  ) => {
+    try {
+      setLoading(true);
+      const loggedInResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(values),
+        }
+      );
+
+      const data = await loggedInResponse.json();
+      onSubmitProps.resetForm();
+
+      if (data.statusCode === 200) {
+        dispatch(setLogin({ user: data.user }));
+        navigate("/home");
+      } else {
+        alert(data.message);
       }
-    );
-
-    const data = await loggedInResponse.json();
-    onSubmitProps.resetForm();
-
-    if (data.statusCode === 200) {
-      dispatch(setLogin({ user: loggedIn.data.user }));
-      navigate("/home");
-    } else {
-      // Handle error case (e.g., show a message to the user)
-      alert(data.message); // Consider using a notification system
+    } catch (error: any) {
+      alert(`Error during loggin in : ${error}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center w-full h-screen bg-gray-100">
-      <div className="py-16 px-5  min-w-[30vw]">
+      <div className="py-16 px-5 min-w-[30vw]">
         <Formik
           onSubmit={login}
           initialValues={initialValuesLogin}
@@ -115,7 +134,7 @@ const Login = () => {
                   type="submit"
                   className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  Login
+                  {loading ? "Loggin in user ..." : "Login"}
                 </button>
                 <p
                   className="mt-4 text-blue-500 cursor-pointer underline"
