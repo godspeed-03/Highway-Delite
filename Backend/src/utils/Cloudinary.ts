@@ -1,4 +1,4 @@
-import { v2 as cloudinary } from 'cloudinary'; // Uses custom declaration
+import { v2 as cloudinary } from 'cloudinary'; 
 import fs from 'fs';
 
 cloudinary.config({

@@ -15,6 +15,5 @@ router.route('/register').post(
 router.route('/login').post(login);
 router.route('/verifyotp').post(verifyOtp);
 router.route('/userdata').post(verifyJWT, getuser)
-// router.route('/logout').post(logout);
 
 export default router;

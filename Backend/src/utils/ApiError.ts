@@ -11,11 +11,11 @@ class ApiError extends Error {
     errors: string[] = [],
     stack: string = ""
   ) {
-    super(message); // Call the parent class constructor (Error)
+    super(message); 
 
     this.statusCode = statusCode;
-    this.data = null;  // Initialize data as null or you can pass data via constructor if needed
-    this.success = false;  // In case of an error, success should be false
+    this.data = null;  
+    this.success = false;  
     this.errors = errors;
 
     if (stack) {

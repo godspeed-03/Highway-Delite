@@ -1,4 +1,4 @@
-// declare module 'cloudinary' {
-//     export const v2: any;
-//   }
+declare module 'cloudinary' {
+    export const v2: any;
+  }
   
