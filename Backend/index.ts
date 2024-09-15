@@ -1,4 +1,4 @@
-import connectDB from "./src/DB/ConnectToDB"; // Adjust based on your actual TypeScript setup
+import connectDB from "./src/DB/ConnectToDB"; 
 import app from "./app";
 
 const PORT = process.env.PORT || 8080;
