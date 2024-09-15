@@ -124,7 +124,7 @@ export const verifyOtp: RequestHandler = async (req: Request, res: Response, nex
 
 // Login a user
 export const login: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-  try {
+  // try {
     const { email, password } = req.body;
 
     if (!(email && password)) {
@@ -135,8 +135,15 @@ export const login: RequestHandler = async (req: Request, res: Response, next: N
     if (!user) {
       throw new ApiError(404, 'User not found, please sign up');
     }
-
-    const correctPassword = await user.isPasswordCorrect(password);
+    if(!user.isverified){
+      res.status(201) // Changed status code to 200 for successful login
+      .json(new ApiResponse(201, {
+        user: user.email,
+      }, 'User is not verified need to verify otp'));
+      
+    }else {
+      const correctPassword = await user.isPasswordCorrect(password);
+      console.log(password)
     if (!correctPassword) {
       throw new ApiError(401, 'Incorrect password, please enter the correct password');
     }
@@ -158,9 +165,13 @@ export const login: RequestHandler = async (req: Request, res: Response, next: N
       .json(new ApiResponse(200, {
         user: loggedInUser,
       }, 'User logged in successfully'));
-  } catch (error) {
-    next(error);
-  }
+
+    }
+
+    
+  // } catch (error) {
+  //   next(error);
+  // }
 };
 
 //get user

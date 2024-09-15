@@ -12,9 +12,7 @@ interface JwtPayload {
 
 export const verifyJWT = async (req: any, res: Response, next: NextFunction) => {
   try {
-    console.log('getting token')
     const token = req.cookies.accessToken;
-    console.log('Cookies:', req.cookies);
 
 
     if (!token) {

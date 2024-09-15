@@ -1,7 +1,7 @@
 import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useRef} from "react";
 
 interface RegisterFormValues {
   fullName: string;
@@ -50,7 +50,6 @@ const initialValuesRegister: RegisterFormValues = {
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const register = async (
     values: RegisterFormValues,
@@ -67,7 +66,6 @@ const Register: React.FC = () => {
     }
 
     try {
-      setLoading(true);
       const savedUserResponse = await fetch(
         `${import.meta.env.VITE_API_URL}/register`,
         {
@@ -91,9 +89,7 @@ const Register: React.FC = () => {
       }
     } catch (error) {
       console.error("Error during registration:", error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   return (
@@ -237,7 +233,7 @@ const Register: React.FC = () => {
                   disabled={isSubmitting}
                   className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300"
                 >
-                  {loading ? "Registering User ..." : "Register"}
+                Register
                 </button>
               </div>
 

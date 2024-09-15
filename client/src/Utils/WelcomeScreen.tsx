@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
 interface User {
   id: string;
@@ -49,10 +50,10 @@ const WelcomeScreen: React.FC = () => {
   }, []);
 
   return loading ? (
-    <div>loading.valueOf............</div>
+    <Loader />
   ) : (
     <div className="w-full h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex flex-col items-center justify-center text-white">
-      <div className="py-16 px-5">
+      <div className="mt-14 px-5">
         <div className="bg-white bg-opacity-10 p-8 rounded-lg shadow-lg flex flex-col justify-center items-center gap-5 text-center text-ellipsis">
           {user ? (
             <>

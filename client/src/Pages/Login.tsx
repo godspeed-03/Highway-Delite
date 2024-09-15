@@ -3,7 +3,6 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../store/reducer";
-import { useState } from "react";
 
 // Define the types for form values
 interface LoginFormValues {
@@ -31,7 +30,6 @@ const initialValuesLogin: LoginFormValues = {
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
   // Login function
   const login = async (
@@ -39,7 +37,6 @@ const Login: React.FC = () => {
     onSubmitProps: FormikHelpers<LoginFormValues>
   ) => {
     try {
-      setLoading(true);
       const loggedInResponse = await fetch(
         `${import.meta.env.VITE_API_URL}/login`,
         {
@@ -52,18 +49,20 @@ const Login: React.FC = () => {
 
       const data = await loggedInResponse.json();
       onSubmitProps.resetForm();
+      console.log(data)
 
-      if (data.statusCode === 200) {
+      if (data.statusCode === 201) {
+        navigate(`/verifyotp/${data.data.user}`);
+      } else if(data.statusCode === 200) {
         dispatch(setLogin({ user: data.user }));
         navigate("/home");
-      } else {
+      }else {
         alert(data.message);
+
       }
     } catch (error: any) {
       alert(`Error during loggin in : ${error}`);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   return (
@@ -134,7 +133,7 @@ const Login: React.FC = () => {
                   type="submit"
                   className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {loading ? "Loggin in user ..." : "Login"}
+                  Login
                 </button>
                 <p
                   className="mt-4 text-blue-500 cursor-pointer underline"

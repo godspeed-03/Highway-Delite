@@ -3,7 +3,6 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../store/reducer";
-import { useState } from "react";
 
 interface OtpFormValues {
   otp: string;
@@ -24,14 +23,12 @@ const OtpVerification: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { email } = useParams<{ email: string }>();
-  const [loading, setLoading] = useState(true);
 
   const verifyOtp = async (
     values: OtpFormValues,
     onSubmitProps: FormikHelpers<OtpFormValues>
   ) => {
     try {
-      setLoading(true);
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/verifyotp`,
         {
@@ -54,7 +51,6 @@ const OtpVerification: React.FC = () => {
       console.error("Error verifying OTP:", error);
     } finally {
       onSubmitProps.setSubmitting(false);
-      setLoading(false);
     }
   };
 
@@ -112,7 +108,7 @@ const OtpVerification: React.FC = () => {
                   disabled={isSubmitting}
                   className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300"
                 >
-                  {loading ? "Verifing OTP" : "Verify OTP"}
+               Verify OTP
                 </button>
               </div>
             </form>
