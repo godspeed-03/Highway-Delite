@@ -15,9 +15,9 @@ app.use( express.urlencoded( {
   limit: "16kb"
 } ) );
 
-// app.get( "/", ( req, res ) => {
-//   res.status( 200 ).json( "Server Running successfully" );
-// } );
+app.get( "/", ( req, res ) => {
+  res.status( 200 ).json( "Server Running successfully" );
+} );
 
 // (err, req, res, next)
 
